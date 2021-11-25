@@ -34,6 +34,8 @@ function selectContents(el: any) {
   console.log("aaa");
 }
 
+const colors = ["dark-blue", "dark-red", "dark-green", "dark-orange"];
+
 function App() {
   const [users, setUsers] = useState({});
   const [conversation, setConversation] = useState();
@@ -58,7 +60,9 @@ function App() {
 
   return (
     <div className="App pa4 sans-serif mid-gray">
-      <h2 className="mt0 f2 dark-blue">👀 Google-speech-to-text Visualizer</h2>
+      <h2 className="mt0 f3 dark-blue mb2">
+        👀 Google-speech-to-text Visualizer
+      </h2>
       <div className="flex">
         <div className="w-40">
           <label className="dib mb2 fw5">Json transcript</label>
@@ -66,49 +70,61 @@ function App() {
             type="textarea"
             name="textValue"
             onChange={handleJson}
-            className="dib w-100"
+            className="dib w-100 b--dark-blue br2"
             style={{ minHeight: 600, whiteSpace: "pre-wrap" }}
           />
         </div>
 
-        <div className="ml4 w-50">
-          <div className="flex">
-            {Object.keys(users).map((user) => {
-              return (
-                <div>
-                  <label>Person n°{user}</label>
-                  <input
-                    type="text"
-                    name={user}
-                    onChange={handleUserName}
-                    className="mh2 pa2"
-                  />
-                </div>
-              );
-            })}
-            <button
-              onClick={() => {
-                selectContents(document.getElementById("transformed-text"));
-              }}
-              className="bg-dark-blue white br2 ba pa2 f5 ph3"
-            >
-              Select all
-            </button>
-          </div>
+        <div className="ml4 w-60">
+          {conversation && conversation.results.length > 0 ? (
+            <div className="flex mt4 justify-between">
+              <div className="flex">
+                {Object.keys(users).map((user) => {
+                  return (
+                    <div>
+                      <label>👤 n°{user}</label>
+                      <input
+                        type="text"
+                        name={user}
+                        onChange={handleUserName}
+                        className={`mh2 pa2 br2 b--${colors[user - 1]}`}
+                        placeholder="Name"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <button
+                onClick={() => {
+                  selectContents(document.getElementById("transformed-text"));
+                }}
+                className="bg-dark-blue white br2 ba pa2 f5 ph3 fw5"
+              >
+                Select all the text
+              </button>
+            </div>
+          ) : (
+            <div className="pt4">
+              ⬅️ Paste the content from a json transcipt to the left to get a
+              version easily readable and reusable.
+              <div className="pv3 fw2">
+                🕵️ This code runs in your browser and do not share your
+                transcript to anyone.
+              </div>
+            </div>
+          )}
 
-          <div
-            id="transformed-text"
-            className="mt4"
-            onClick={(e) => selectContents(e.target)}
-          >
+          <div id="transformed-text" className="mt3">
             {conversation &&
               conversation.results.map((message) => {
                 return (
                   <div className="pb1 flex">
-                    <span className="code f7">
+                    <span className="code f7 black-40">
                       {convertToMinutes(message.resultEndTime)}{" "}
-                      <span className="f5 fw4 sans-serif">
-                        <span className="fw6">
+                      <span className="f5 fw4 sans-serif dark-gray">
+                        <span
+                          className={`fw6 ${colors[message.channelTag - 1]}`}
+                        >
                           {users[message.channelTag]}:{" "}
                         </span>
                         {message.alternatives.map((text) => text.transcript)}
