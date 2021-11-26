@@ -117,17 +117,28 @@ function App() {
           <div id="transformed-text" className="mt3">
             {conversation &&
               conversation.results.map((message) => {
+                const text = message.alternatives.map(
+                  (text) => text.transcript
+                );
+
+                if (!text.join("").length) {
+                  return;
+                }
+
+                const firstWordTime =
+                  message.alternatives[0].words[0].startTime;
+
                 return (
                   <div className="pb1 flex">
                     <span className="code f7 black-40">
-                      {convertToMinutes(message.resultEndTime)}{" "}
+                      {convertToMinutes(firstWordTime)}{" "}
                       <span className="f5 fw4 sans-serif dark-gray">
                         <span
                           className={`fw6 ${colors[message.channelTag - 1]}`}
                         >
                           {users[message.channelTag]}:{" "}
                         </span>
-                        {message.alternatives.map((text) => text.transcript)}
+                        {text.join(" ")}
                       </span>
                     </span>
                   </div>
