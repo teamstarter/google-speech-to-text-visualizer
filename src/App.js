@@ -1,29 +1,7 @@
 import { useState } from "react";
 import "tachyons/css/tachyons.min.css";
-
-/**
- * 1046.800
- */
-function convertToMinutes(timeInString) {
-  const sec = parseInt(timeInString, 10); // convert value to number if it's string
-  let hours = Math.floor(sec / 3600); // get hours
-  let minutes = Math.floor((sec - hours * 3600) / 60); // get minutes
-  let seconds = sec - hours * 3600 - minutes * 60; //  get seconds
-  // add 0 if value < 10; Example: 2 => 02
-  if (hours < 10) {
-    hours = "0" + hours;
-  }
-  if (minutes < 10) {
-    minutes = "0" + minutes;
-  }
-  if (seconds < 10) {
-    seconds = "0" + seconds;
-  }
-  if (parseInt(hours) === 0) {
-    return minutes + ":" + seconds; // Return is HH : MM : SS
-  }
-  return hours + ":" + minutes + ":" + seconds; // Return is HH : MM : SS
-}
+import TextOnly from "./components/textOnly";
+import Timelines from "./components/timelines";
 
 function selectContents(el: any) {
   let range = document.createRange();
@@ -31,23 +9,38 @@ function selectContents(el: any) {
   let sel = window.getSelection();
   sel.removeAllRanges();
   sel.addRange(range);
-  console.log("aaa");
+}
+
+function getUsers(json) {
+  return json.results.reduce((acc, item) => {
+    return { [item.channelTag]: null, ...acc };
+  }, {});
 }
 
 const colors = ["dark-blue", "dark-red", "dark-green", "dark-orange"];
 
 function App() {
-  const [users, setUsers] = useState({});
-  const [conversation, setConversation] = useState();
+  const [lastConversation, setLastConversation] = useState(
+    window.localStorage.getItem("lastConversation")
+  );
+  const lastConversationJson = lastConversation
+    ? JSON.parse(lastConversation)
+    : null;
+  const [conversation, setConversation] = useState(
+    lastConversation ? lastConversationJson : null
+  );
+  const [users, setUsers] = useState(
+    lastConversation ? getUsers(lastConversationJson) : {}
+  );
+  const [tab, setTab] = useState("timelines");
 
   const handleJson = (e) => {
     const json = JSON.parse(e.target.value);
-    const users = json.results.reduce((acc, item) => {
-      return { [item.channelTag]: null, ...acc };
-    }, {});
+    const users = getUsers(json);
 
     setUsers(users);
     setConversation(json);
+    window.localStorage.setItem("lastConversation", JSON.stringify(json));
   };
 
   const handleUserName = (e) => {
@@ -59,23 +52,33 @@ function App() {
   };
 
   return (
-    <div className="App pa4 sans-serif mid-gray">
-      <h2 className="mt0 f3 dark-blue mb2">
+    <div className="App pa4 sans-serif mid-gray flex flex-column justify-center items-center w-100">
+      <h2 className="dib mt0 f3 dark-blue mb2">
         👀 Google-speech-to-text Visualizer
       </h2>
-      <div className="flex">
-        <div className="w-40">
-          <label className="dib mb2 fw5">Json transcript</label>
-          <textarea
-            type="textarea"
-            name="textValue"
-            onChange={handleJson}
-            className="dib w-100 b--dark-blue br2"
-            style={{ minHeight: 600, whiteSpace: "pre-wrap" }}
-          />
-        </div>
+      <div className="" style={{ minWidth: 800 }}>
+        {!conversation ? (
+          <div className="w-100">
+            <div className="pt3">
+              ⬇️ &nbsp; Paste the content from a json transcipt bellow to get a
+              version easily readable and reusable.
+              <div className="pv3 fw2">
+                🕵️ This code runs in your browser and do not share your
+                transcript to anyone.
+              </div>
+            </div>
+            <textarea
+              type="textarea"
+              name="textValue"
+              value={lastConversation}
+              onChange={handleJson}
+              className="dib w-100 b--dark-blue br2"
+              style={{ minHeight: 600, whiteSpace: "pre-wrap" }}
+            />
+          </div>
+        ) : null}
 
-        <div className="ml4 w-60">
+        <div className="ml4 w-100">
           {conversation && conversation.results.length > 0 ? (
             <div className="flex mt4 justify-between">
               <div className="flex">
@@ -89,62 +92,81 @@ function App() {
                         onChange={handleUserName}
                         className={`mh2 pa2 br2 b--${colors[user - 1]}`}
                         placeholder="Name"
+                        style={{ width: 110 }}
                       />
                     </div>
                   );
                 })}
               </div>
-              <button
-                onClick={() => {
-                  selectContents(document.getElementById("transformed-text"));
-                }}
-                className="bg-dark-blue white br2 ba pa2 f5 ph3 fw5"
-              >
-                Select all the text
-              </button>
-            </div>
-          ) : (
-            <div className="pt4">
-              ⬅️ Paste the content from a json transcipt to the left to get a
-              version easily readable and reusable.
-              <div className="pv3 fw2">
-                🕵️ This code runs in your browser and do not share your
-                transcript to anyone.
+              <div className="flex">
+                <button
+                  onClick={() => {
+                    window.localStorage.removeItem("lastConversation", null);
+                    setLastConversation(null);
+                    setConversation(null);
+                  }}
+                  className="bg-white b-blue blue white br2 ba pa2 f5 ph3 fw5 mr3"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={() => {
+                    selectContents(document.getElementById("transformed-text"));
+                  }}
+                  className="bg-dark-blue white br2 ba pa2 f5 ph3 fw5"
+                >
+                  Select all the text
+                </button>
               </div>
             </div>
-          )}
+          ) : null}
 
-          <div id="transformed-text" className="mt3">
-            {conversation &&
-              conversation.results.map((message) => {
-                const text = message.alternatives.map(
-                  (text) => text.transcript
-                );
+          {conversation ? (
+            <div
+              id="transformed-text"
+              className={`mt3 w-100`}
+              style={{ minWidth: 800, maxWidth: 800 }}
+            >
+              <div
+                className="flex w-100 bb mb3"
+                style={{ borderBottomColor: "lightgray" }}
+              >
+                <div
+                  href="#"
+                  className={`link blue pa2 pointer ${
+                    tab === "timelines" ? "fw7" : ""
+                  }`}
+                  onClick={() => setTab("timelines")}
+                >
+                  Timelines
+                </div>
+                <div
+                  href="#"
+                  className={`link blue pa2 pointer ${
+                    tab === "textOnly" ? "fw7" : ""
+                  }`}
+                  onClick={() => setTab("textOnly")}
+                >
+                  Text only
+                </div>
+              </div>
 
-                if (!text.join("").length) {
-                  return;
-                }
-
-                const firstWordTime =
-                  message.alternatives[0].words[0].startTime;
-
-                return (
-                  <div className="pb1 flex">
-                    <span className="code f7 black-40">
-                      {convertToMinutes(firstWordTime)}{" "}
-                      <span className="f5 fw4 sans-serif dark-gray">
-                        <span
-                          className={`fw6 ${colors[message.channelTag - 1]}`}
-                        >
-                          {users[message.channelTag]}:{" "}
-                        </span>
-                        {text.join(" ")}
-                      </span>
-                    </span>
-                  </div>
-                );
-              })}
-          </div>
+              {tab === "textOnly" ? (
+                <TextOnly
+                  conversation={conversation}
+                  colors={colors}
+                  users={users}
+                />
+              ) : null}
+              {tab === "timelines" ? (
+                <Timelines
+                  conversation={conversation}
+                  colors={colors}
+                  users={users}
+                />
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

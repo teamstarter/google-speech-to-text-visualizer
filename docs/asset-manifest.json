@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/css/main.6dea0f05.chunk.css",
-    "main.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/main.2711d266.chunk.js",
-    "main.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/main.2711d266.chunk.js.map",
+    "main.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/main.98a9a2e2.chunk.js",
+    "main.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/main.98a9a2e2.chunk.js.map",
     "runtime-main.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/runtime-main.d974b013.js",
     "runtime-main.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/runtime-main.d974b013.js.map",
     "static/css/2.1a8de560.chunk.css": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/css/2.1a8de560.chunk.css",
-    "static/js/2.e6bcc36c.chunk.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.e6bcc36c.chunk.js",
-    "static/js/2.e6bcc36c.chunk.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.e6bcc36c.chunk.js.map",
+    "static/js/2.1419e97e.chunk.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.1419e97e.chunk.js",
+    "static/js/2.1419e97e.chunk.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.1419e97e.chunk.js.map",
     "static/js/3.2152abe2.chunk.js": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/3.2152abe2.chunk.js",
     "static/js/3.2152abe2.chunk.js.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/3.2152abe2.chunk.js.map",
     "index.html": "https://teamstarter.github.io/google-speech-to-text-visualizer/index.html",
     "static/css/2.1a8de560.chunk.css.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/css/2.1a8de560.chunk.css.map",
     "static/css/main.6dea0f05.chunk.css.map": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/css/main.6dea0f05.chunk.css.map",
-    "static/js/2.e6bcc36c.chunk.js.LICENSE.txt": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.e6bcc36c.chunk.js.LICENSE.txt"
+    "static/js/2.1419e97e.chunk.js.LICENSE.txt": "https://teamstarter.github.io/google-speech-to-text-visualizer/static/js/2.1419e97e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.d974b013.js",
     "static/css/2.1a8de560.chunk.css",
-    "static/js/2.e6bcc36c.chunk.js",
+    "static/js/2.1419e97e.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.2711d266.chunk.js"
+    "static/js/main.98a9a2e2.chunk.js"
   ]
 }
