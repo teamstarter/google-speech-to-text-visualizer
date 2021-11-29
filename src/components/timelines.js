@@ -47,7 +47,7 @@ function Timeline({ users, user, conversation, colors }) {
 
               return (
                 <div
-                  className="pb1 flex absolute left-0 pa2"
+                  className="pb1 flex absolute left-0 pa2 showOnHover"
                   style={{
                     top: toMs(message.alternatives[0].words[0].startTime),
                     minHeight: `${

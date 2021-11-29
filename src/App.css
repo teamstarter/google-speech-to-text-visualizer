@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.showOnHover:hover {
+  z-index: 2;
+  background-color: white;
+}
